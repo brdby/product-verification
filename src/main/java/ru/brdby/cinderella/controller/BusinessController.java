@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.brdby.cinderella.data.domain.Product;
 import ru.brdby.cinderella.data.repository.JdbcProductRepository;
+import ru.brdby.cinderella.service.QRCodeService;
 import ru.brdby.cinderella.service.UUIDService;
 
 @Controller
@@ -17,18 +18,25 @@ import ru.brdby.cinderella.service.UUIDService;
 @RequiredArgsConstructor
 public class BusinessController {
 
+
     @Value("${urlPattern}")
     private String urlBase;
 
     private final UUIDService UUIDService;
     private final JdbcProductRepository jdbcProductRepository;
+    private final QRCodeService qrCodeService;
 
     @GetMapping("/generateURL")
     public String generateURL(@RequestParam String name, Model model) {
-        Product product = new Product(UUIDService.generateRandomUUID(), name);
+        String uuid = UUIDService.generateRandomUUID();
+        String url = String.format(urlBase, uuid);
+        Product product = new Product(uuid, name);
+
         jdbcProductRepository.save(product);
         log.info("Product created: " + product);
-        model.addAttribute("generatedURL", String.format(urlBase, product.getUUID()));
+
+        model.addAttribute("image", qrCodeService.generateQRBase64FromUUID(uuid));
+        model.addAttribute("url", url);
         return "generator";
     }
 
