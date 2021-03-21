@@ -22,7 +22,7 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class QRCodeService {
 
-    public String generateQRBase64FromUUID(String url) {
+    public String generateQRBase64URL(String url) {
         try {
             QRCodeWriter barcodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = barcodeWriter.encode(url, BarcodeFormat.QR_CODE, 200, 200);
