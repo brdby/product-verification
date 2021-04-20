@@ -1,4 +1,4 @@
-package ru.brdby.cinderella.configuration.security;
+package ru.brdby.cinderella.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,29 +16,34 @@ import ru.brdby.cinderella.service.UserDetailsServiceImpl;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsServiceImpl userDetailsService;
+	private final UserDetailsServiceImpl userDetailsService;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(encoder());
-    }
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth
+				.userDetailsService(userDetailsService)
+				.passwordEncoder(encoder());
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                    .antMatchers("/generate")
-                        .hasAnyAuthority("BUSINESS")
-                    .antMatchers("/", "/**", "/verification")
-                        .permitAll()
-                .and()
-                .formLogin();
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+				.authorizeRequests()
+					.antMatchers("/business/**")
+						.hasAnyAuthority("BUSINESS")
+					.antMatchers("/", "/**")
+						.permitAll()
+				.and()
+					.formLogin()
+					.loginPage("/login")
+				.and()
+					.logout()
+						.logoutSuccessUrl("/");
+	}
 
-    @Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder encoder() {
+		return new BCryptPasswordEncoder();
+	}
+
 }

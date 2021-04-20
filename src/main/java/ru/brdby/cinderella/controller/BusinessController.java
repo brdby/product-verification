@@ -3,12 +3,14 @@ package ru.brdby.cinderella.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.brdby.cinderella.data.domain.Product;
+import ru.brdby.cinderella.data.domain.User;
 import ru.brdby.cinderella.data.repository.ProductRepository;
 import ru.brdby.cinderella.service.QRCodeService;
 import ru.brdby.cinderella.service.UUIDService;
@@ -16,7 +18,7 @@ import ru.brdby.cinderella.service.UUIDService;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-//@RequestMapping("/business")
+@RequestMapping("/business")
 public class BusinessController {
 
 
@@ -28,10 +30,10 @@ public class BusinessController {
     private final QRCodeService qrCodeService;
 
     @GetMapping("/generate")
-    public String generate(@RequestParam String name, Model model) {
+    public String generate(@RequestParam String name, Model model, @AuthenticationPrincipal User user) {
         String uuid = UUIDService.generateRandomUUID();
         String url = String.format(urlBase, uuid);
-        Product product = new Product(uuid, name);
+        Product product = new Product(uuid, name, user.getUsername());
 
         productRepository.save(product);
         log.info("Product created: " + product);

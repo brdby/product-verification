@@ -22,4 +22,6 @@ public class Product {
     @Size(min = 5, message = "Name must be at least 5 characters long")
     private final String name;
 
+    private final String username;
+
 }
