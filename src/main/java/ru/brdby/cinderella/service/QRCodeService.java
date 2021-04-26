@@ -22,15 +22,14 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class QRCodeService {
 
-    public String generateQRBase64URL(String url) {
+    public byte[] generateQRBase64URL(String url) {
         try {
             QRCodeWriter barcodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = barcodeWriter.encode(url, BarcodeFormat.QR_CODE, 200, 200);
             BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, "jpg", out);
-            byte[] bytes = out.toByteArray();
-            return Base64.getEncoder().encodeToString(bytes);
+            return out.toByteArray();
         } catch (WriterException e) {
             log.error("Error generating QR " + url);
             e.printStackTrace();

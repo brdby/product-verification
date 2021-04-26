@@ -5,9 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Base64;
 
 @Entity
 @Data
@@ -23,5 +23,15 @@ public class Product {
     private final String name;
 
     private final String username;
+
+    private final String url;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private final byte[] qrCode;
+
+    public String getBase64QrCode(){
+        return Base64.getEncoder().encodeToString(qrCode);
+    }
 
 }

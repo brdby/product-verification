@@ -18,11 +18,13 @@ public class VerificationController {
 
     private final ProductRepository productRepository;
 
-    @GetMapping("/verification")
+    @GetMapping("/verificate")
     public String verification(@RequestParam String uuid, Model model) {
         Optional<Product> product = productRepository.findById(uuid);
-        product.ifPresent(value -> model.addAttribute("name", value.getName()));
-        return "verification";
+        product.ifPresentOrElse(
+                value -> model.addAttribute("verificationResult", value.getName() + " successfully verificated!"),
+                () -> model.addAttribute("verificationResult", "Product is not verificated!"));
+        return "verificate";
     }
 
 }
