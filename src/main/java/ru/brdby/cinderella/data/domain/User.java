@@ -29,12 +29,11 @@ public class User implements UserDetails {
 
     private final String username;
     private final String password;
-    private final String fullName;
     private final String companyName;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("BUSINESS"));
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_BUSINESS"));
     }
 
     @Override

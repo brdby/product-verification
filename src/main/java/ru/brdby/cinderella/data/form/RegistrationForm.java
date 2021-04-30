@@ -13,6 +13,6 @@ public class RegistrationForm {
     private String companyName;
 
     public User toUser(PasswordEncoder passwordEncoder) {
-        return new User(username, passwordEncoder.encode(password), fullName, companyName);
+        return new User(username, passwordEncoder.encode(password), companyName);
     }
 }
