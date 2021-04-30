@@ -13,7 +13,7 @@
       <li class="nav-item" th:classappend="${#httpServletRequest.requestURI == '/manufacturer'} ? 'active' : ''">
         <a class="nav-link" th:href="@{/manufacturer}">Производителям</a>
       </li>
-      <li class="nav-item" sec:authorize="hasRole('MANUFACTURER')">
+      <li class="nav-item" sec:authorize="hasRole('MANUFACTURER')" th:classappend="${#httpServletRequest.requestURI == '/manufacturer/products'} ? 'active' : ''">
         <a class="nav-link" th:href="@{/manufacturer/products}">Мои товары</a>
       </li>
       <li>
@@ -30,6 +30,7 @@
     <form sec:authorize="isAnonymous()" th:action="@{/register}">
       <button class="btn btn-success my-2 mr-sm-2" type="submit">Зарегистрироваться</button>
     </form>
+    <p sec:authorize="isAuthenticated()" class= "navbar-text my-auto mr-sm-2">Добро пожаловать, <span sec:authentication="name">username</span>!</p>
     <form method="post" sec:authorize="isAuthenticated()" th:action="@{/logout}">
       <button class="btn btn-secondary my-2 mr-sm-2" type="submit">Выйти</button>
     </form>

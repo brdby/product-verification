@@ -9,7 +9,6 @@ public class RegistrationForm {
 
     private String username;
     private String password;
-    private String fullName;
     private String companyName;
 
     public User toUser(PasswordEncoder passwordEncoder) {

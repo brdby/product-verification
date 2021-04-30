@@ -1,9 +1,9 @@
 package ru.brdby.cinderella.data.domain;
 
 import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -11,7 +11,7 @@ import java.util.Base64;
 
 @Entity
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor(force = true)
 public class Product {
 
@@ -19,11 +19,11 @@ public class Product {
     private final String UUID;
 
     @ManyToOne
-    private final User user;
+    private User user;
 
     @NotNull
     @Size(min = 5, message = "Name must be at least 5 characters long")
-    private final String name;
+    private String name;
 
     private final String url;
 

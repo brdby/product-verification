@@ -23,8 +23,9 @@
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <h1 class="fw-light">Список ваших товаров</h1>
+                    <p class="lead">Добро пожаловать, <span sec:authentication="name">username</span>!</p>
                     <p>
-                        <a th:href="@{product/create}" class="btn btn-primary my-2">Создать новый товар</a>
+                        <a th:href="@{products/create}" class="btn btn-primary my-2">Создать новый товар</a>
                     </p>
                 </div>
             </div>
@@ -39,7 +40,7 @@
                     <div class="card-body">
                         <h5 th:text="${product.name}" class="card-title">Имя товара</h5>
                         <p th:text="${product.UUID}" class="card-text">UUID товара</p>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Редактировать</button>
+                        <a th:href="@{products/{uuid}(uuid=${product.UUID})}" type="button" class="btn btn-sm btn-outline-secondary">Редактировать</a>
                     </div>
                 </div>
             </div>
