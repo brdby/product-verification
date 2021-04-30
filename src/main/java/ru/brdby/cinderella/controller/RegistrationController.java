@@ -11,6 +11,8 @@ import ru.brdby.cinderella.data.domain.User;
 import ru.brdby.cinderella.data.form.RegistrationForm;
 import ru.brdby.cinderella.data.repository.UserRepository;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/register")
 @Slf4j
@@ -28,8 +30,10 @@ public class RegistrationController {
     @PostMapping
     public String processRegistration(RegistrationForm form) {
         User user = form.toUser(passwordEncoder);
-        userRepository.save(user);
-        log.info("User added " + user);
+        if (userRepository.findByUsername(user.getUsername()).isEmpty()) {
+            userRepository.save(user);
+            log.info("User added " + user);
+        }
         return "redirect:/login";
     }
 }

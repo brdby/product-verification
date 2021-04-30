@@ -18,16 +18,17 @@ public class Product {
     @Id
     private final String UUID;
 
+    @ManyToOne
+    private final User user;
+
     @NotNull
     @Size(min = 5, message = "Name must be at least 5 characters long")
     private final String name;
 
-    private final String username;
-
     private final String url;
 
     @Lob
-    @Basic(fetch = FetchType.LAZY)
+    @Basic
     private final byte[] qrCode;
 
     public String getBase64QrCode(){

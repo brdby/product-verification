@@ -26,8 +26,10 @@ body {
     z-index: 2;
 }
 
-.form-register input {
-    margin-bottom: -1px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+.form-register input.middleB {
+    margin-bottom: 4px;
+}
+
+.form-register input.bottomB{
+    margin-bottom: 10px;
 }
