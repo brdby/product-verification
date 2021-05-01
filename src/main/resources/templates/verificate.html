@@ -9,13 +9,79 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
-    <title>Product Verification</title>
+    <div th:insert="fragments/navbar :: navbar"></div>
+
+    <title>Верификация товара</title>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
-<p th:text="${verificationResult}">No such product!</p>
+<main class="mb-5">
+    <div class="bg-light mb-3">
+        <section class="py-5 text-center container">
+            <div class="row py-lg-5">
+                <div class="col-lg-6 col-md-8 mx-auto">
+                    <h1 th:if="${product}" th:text="${product.name}" class="fw-light">Название продукта</h1>
+                    <h1 th:unless="${product}" class="fw-light">Продукт не верифицирован!</h1>
+                </div>
+            </div>
+        </section>
+    </div>
 
+    <div th:unless="${product}" class="container text-center">
+        <img th:src="@{/images/sad.jpg}"/>
+    </div>
+    <div th:if="${product}" class="container">
+        <div class="row">
+            <div class="col-8">
+                <h4 class="mb-3">Информация о товаре</h4>
+                <form method="post" th:object="${product}" th:action="@{{uuid}(uuid=${product.UUID})}" class="needs-validation">
+                    <div class="mb-3">
+                        <label for="uuid">UUID продукта</label>
+                        <input th:field="*{UUID}" type="text" class="form-control" id="uuid" placeholder="Название продукта" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name">Название продукта</label>
+                        <input th:field="*{name}" type="text" class="form-control" id="name" placeholder="Название продукта" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description">Описание продукта</label>
+                        <textarea maxlength="255" th:field="*{description}" class="form-control" placeholder="Краткое описание продукта" id="description" rows="3" readonly></textarea>
+                    </div>
+
+                    <div th:if="${product.storeName} != ''">
+                        <hr class="mb-3">
+                        <h4 class="mb-3">Точка реализации товара</h4>
+
+                        <div class="mb-3">
+                            <label for="storeName">Название</label>
+                            <input th:field="*{storeName}" type="text" class="form-control" id="storeName" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="storeAddress">Адрес</label>
+                            <input th:field="*{storeAddress}" class="form-control" id="storeAddress" readonly>
+                        </div>
+                    </div>
+
+                    <hr class="mb-4">
+                    <div class="row">
+                        <div class="col">
+                            <a th:href="@{/}" class="btn btn-secondary btn-lg btn-block" type="button">Назад</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-4">
+                <img class="pro-img-details" th:src="'data:image/jpeg;base64,' + ${product.getBase64QrCode()}"/>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

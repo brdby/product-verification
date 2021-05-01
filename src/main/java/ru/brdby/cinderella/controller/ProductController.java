@@ -2,7 +2,6 @@ package ru.brdby.cinderella.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.brdby.cinderella.data.domain.Product;
 import ru.brdby.cinderella.data.domain.User;
 import ru.brdby.cinderella.data.form.ProductForm;
-import ru.brdby.cinderella.data.repository.ProductRepository;
-import ru.brdby.cinderella.service.QRCodeService;
-import ru.brdby.cinderella.service.UUIDService;
+import ru.brdby.cinderella.service.ProductService;
 
 @Controller
 @Slf4j
@@ -24,44 +21,29 @@ import ru.brdby.cinderella.service.UUIDService;
 public class ProductController {
 
 
-    @Value("${urlPattern}")
-    private String urlBase;
-
-    private final UUIDService UUIDService;
-    private final ProductRepository productRepository;
-    private final QRCodeService qrCodeService;
+    private final ProductService productService;
 
     @GetMapping("/create")
-    public String generate() {
+    public String generate(Product product) {
         return "create";
     }
 
 
     @PostMapping("/create")
     public String generate(ProductForm productForm, @AuthenticationPrincipal User user) {
-        String name = productForm.getName();
-        String uuid = UUIDService.generateRandomUUID();
-        String url = String.format(urlBase, uuid);
-        byte[] qrCode = qrCodeService.generateQRBase64URL(uuid);
-        Product product = new Product(uuid, user, name, url, qrCode);
-        productRepository.save(product);
-        log.info("Product created: " + product);
-
+        productService.createProduct(user, productForm);
         return "redirect:/manufacturer/products";
     }
 
     @GetMapping("/{uuid}")
     public String productPage(Model model, @PathVariable String uuid) {
-        productRepository.findById(uuid).ifPresent(value -> model.addAttribute("product", value));
+        productService.findProductById(uuid).ifPresent(value -> model.addAttribute("product", value));
         return "productPage";
     }
 
     @PostMapping("/{uuid}")
     public String saveProduct(ProductForm productForm, @PathVariable String uuid) {
-        productRepository.findById(uuid).ifPresent(value -> {
-            value.setName(productForm.getName());
-            productRepository.save(value);
-        });
+        productService.updateProductIfPresent(uuid, productForm);
         return "redirect:/manufacturer/products";
     }
 

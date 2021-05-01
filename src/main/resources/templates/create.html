@@ -31,11 +31,44 @@
         <div class="row justify-content-md-center">
             <div class="col-8">
                 <h4 class="mb-3">Информация о товаре</h4>
-                <form method="post" th:action="@{create}" class="needs-validation">
+                <form method="post" th:object="${product}" th:action="@{create}" class="needs-validation">
 
                     <div class="mb-3">
                         <label for="name">Название продукта</label>
-                        <input name="name" type="text" class="form-control" id="name" placeholder="Название продукта" required>
+                        <input th:field="*{name}" type="text" class="form-control" id="name" placeholder="Название продукта" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description">Описание продукта</label>
+                        <textarea maxlength="255" th:field="*{description}" class="form-control" placeholder="Краткое описание продукта" id="description" rows="3"></textarea>
+                    </div>
+
+                    <hr class="mb-3">
+                    <h4 class="mb-3">Настройки товара</h4>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input th:field="*{oneTimeProduct}" class="form-check-input" type="checkbox" id="oneTimeProduct">
+                            <label class="form-check-label" for="oneTimeProduct">
+                                Одноразовая верификация продукта
+                            </label>
+                        </div>
+                        <small class="form-text text-muted">
+                            После первой верификации данного продукта на сайте, вся информация о нем будет удалена и дальнейшие проверки будут выдавать ошибку.
+                        </small>
+                    </div>
+
+                    <hr class="mb-3">
+                    <h4 class="mb-3">Точка реализации товара</h4>
+
+                    <div class="mb-3">
+                        <label for="storeName">Название</label>
+                        <input th:field="*{storeName}" type="text" class="form-control" id="storeName" placeholder="Магазин спецтехники &laquo;Гаечка&raquo;">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="storeAddress">Адрес</label>
+                        <input th:field="*{storeAddress}" class="form-control" id="storeAddress" placeholder="Россия, Республика Татарстан, Город Казань, Улица Братьев Касимовых, дом 64">
                     </div>
 
                     <hr class="mb-4">
